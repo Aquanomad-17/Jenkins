@@ -27,17 +27,19 @@ pipeline {
             }
         }
 
-       stage('Build Docker Image'){
-            steps{
+           stages {
+        stage('Build Docker Image') {
+            steps {
                 script {
                     def customImage = docker.build("anas1709/petclinic:${env.BUILD_NUMBER}", "./docker")
                     docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-                    customImage.push()    
+                        customImage.push()
+                    }
                 }
             }
         }
         }
-
+           }
         stage('Deploy to EKS') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: '743338159749', secretKeyVariable: '/5qQhjOBOZ5zTCOzZQEvlY7ZP1IYI4MW5MeeuEVh
